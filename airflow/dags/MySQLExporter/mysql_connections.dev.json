@@ -1,0 +1,3 @@
+{
+  "Airflow connection ids": ["mysql_metadata_source_local", "mysql_metadata_source_yandex_cloud"]
+}

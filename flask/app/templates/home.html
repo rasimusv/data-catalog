@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block header %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <a class="navbar-brand fs-4 pt-0 pb-0" href="/">
+            <img src="https://datalaboratory.one/wp-content/uploads/2022/12/Data-lab-logo-1.png" alt=""
+                 width="55"
+                 height="75"
+                 class="d-inline-block align-text-center">
+            Каталог данных</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Начальная страница</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/infocards">Инфокарты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/lineage">Lineage</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topology">Топология хранилищ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/docs">Документация</a>
+                </li>
+            </ul>
+            <form class="d-flex form-floating" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.search(class_="form-control me-sm-2 rounded-4 shadow", placeholder_="Поиск") }}
+                {{ form.search.label}}
+                <button id="submit" class="btn btn-secondary my-2 my-sm-0 rounded-4 shadow" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="row justify-content-md-center">
+    <div class="col-8 mt-5">
+        <h1 class="text-center">Добро пожаловать</h1>
+    </div>
+    <div class="col-8 mt-2">
+        <p class="text-center fw-light fs-5">Вы находитесь на главной странице каталога данных — инструмента сбора,
+            хранения и
+            предоставления доступа к метаданным по информации, хранящейся в различных хранилищах компании,
+            позволяющий увидеть их структуру, проследить lineage</p>
+    </div>
+    <div class="col-8 mt-2">
+        <p class="text-center fw-light fs-5">Вы можете воспользоваться навигацией ниже или поиском в углу экрана</p>
+    </div>
+</div>
+<div class="row justify-content-md-center mt-5 mb-5">
+    <div class="col-8">
+        <div class="card-group">
+            <div class="card text-center bg-warning">
+                <div class="d-flex flex-column card-body">
+                    <h1 class="card-title fas fa-book-open"></h1>
+                    <p class="card-text mt-auto">В этом разделе вы можете просматривать информационные карты любых
+                        метаданных</p>
+                    <a href="/infocards" class="btn btn-primary mt-auto">Инфокарты</a>
+                </div>
+            </div>
+            <div class="card text-center bg-info">
+                <div class="d-flex flex-column card-body">
+                    <h1 class="card-title fas fa-random"></h1>
+                    <p class="card-text mt-auto">В этом разделе вы можете просматривать Data Lineage</p>
+                    <a href="/lineage" class="btn btn-primary mt-auto">Data Lineage</a>
+                </div>
+            </div>
+            <div class="card text-center bg-success">
+                <div class="d-flex flex-column card-body">
+                    <h1 class="card-title fas fa-project-diagram"></h1>
+                    <p class="card-text mt-auto">В этом разделе вы можете взаимодействовать с метаданными по
+                        инфраструктуре</p>
+                    <a href="/topology" class="btn btn-primary mt-auto">Топология хранилищ</a>
+                </div>
+            </div>
+            <div class="card text-center bg-secondary">
+                <div class="d-flex flex-column card-body">
+                    <h1 class="card-title fas fa-exclamation-circle"></h1>
+                    <p class="card-text mt-auto">В этом разделе вы можете информацию по проекту</p>
+                    <a href="/docs" class="btn btn-primary mt-auto">Документация</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

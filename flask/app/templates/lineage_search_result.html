@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block header %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <a class="navbar-brand fs-4 pt-0 pb-0" href="/">
+            <img src="https://datalaboratory.one/wp-content/uploads/2022/12/Data-lab-logo-1.png" alt=""
+                 width="55"
+                 height="75"
+                 class="d-inline-block align-text-center">
+            Каталог данных</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Начальная страница</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/infocards">Инфокарты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/lineage">Lineage</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topology">Топология хранилищ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/docs">Документация</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col m-lg-5">
+        <a href="{{ backlink }}" class="fas fa-chevron-circle-left"> Вернуться назад</a>
+    </div>
+</div>
+<div class="row justify-content-md-center">
+    <div class="col-8">
+        <h1 class="text-center">Data Lineage</h1>
+        <div class="form-group mt-4 mb-5">
+            <form class="d-flex form-floating" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.search(class_="form-control me-lg-2 shadow rounded-4", placeholder_="Поиск",
+                value_=search_query) }}
+                {{ form.search.label}}
+                <button class="btn btn-secondary shadow rounded-4" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row  justify-content-md-center">
+    <div class="col-8">
+        <div class="card mb-3">
+            <h5 class="card-header">Связи</h5>
+            <div class="card-body bg-light">
+                <div class="list-group rounded-4">
+                    {% for relation in results %}
+                    <a href="/lineage/{{ relation.rid }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ relation.relation }}</h5>
+                            <small class="text-muted">{{ relation.core_system }}</small>
+                        </div>
+                        <p class="mb-1">Последнее выполнение: {{ relation.last_time }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

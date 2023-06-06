@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <!-- Обязательные метатеги -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>.width400px {
+        width: 400px
+    }</style>
+    <link rel="stylesheet" href="{{url_for('static', filename='treant/Treant.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='flatly/bootstrap.css')}}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='highlightjs/highlightjs.min.css')}}">
+
+    <title>Каталог данных</title>
+</head>
+<body class="d-flex flex-column min-vh-100">
+<header>
+    {% block header %}{% endblock %}
+</header>
+<content class="container-fluid">
+    {% block content %}{% endblock %}
+</content>
+<footer class="bg-dark text-center text-white mt-auto">
+    <div class="container p-4">
+        <div class="row justify-content-md-center">
+            <div class="col-lg-8 col-md-6 mb-4 mb-md-0">
+                <h5 class="text-uppercase">Полезные ссылки</h5>
+                <ul class="list-unstyled mb-0">
+                    <li>
+                        <a href="https://github.com/rasimusv/data-catalog" class="text-white">Репозиторий с исходным
+                            кодом</a>
+                    </li>
+                    <li>
+                        <a href="/docs" class="text-white">Документация</a>
+                    </li>
+                    <li>
+                        <a href="https://datalaboratory.one" class="text-white">Сайт DataLab</a>
+                    </li>
+                    <li>
+                        <a href="https://t.me/rasimusv" class="text-white">Написать автору</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        Разработано в 2023 году
+        <a class="text-white" href="https://kpfu.ru/student/RasIGaripov">Расимом Гариповым</a>
+    </div>
+</footer>
+<script src="{{url_for('static', filename='treant/vendor/raphael.js')}}"></script>
+<script src="{{url_for('static', filename='treant/Treant.js')}}"></script>
+<script src="{{url_for('static', filename='flatly/bootstrap.bundle.min.js')}}"></script>
+<script src="{{url_for('static', filename='highlightjs/highlightjs.js')}}"></script>
+<script>hljs.highlightAll();
+new Treant(chart_config);</script>
+</body>
+</html>

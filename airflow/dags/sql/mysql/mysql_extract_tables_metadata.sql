@@ -1,0 +1,43 @@
+SELECT CONCAT(TABLE_SCHEMA, '.', TABLE_NAME)                                                        as entity_name,
+       TABLE_NAME                                                                                   as entity_name_short,
+       CONCAT('mysql.', REPLACE((SELECT @@hostname), '.', '-'), '.', TABLE_SCHEMA, '.', TABLE_NAME) as urn,
+       CONCAT('mysql.', REPLACE((SELECT @@hostname), '.', '-'), '.', TABLE_SCHEMA)                  as parent_urn,
+       (SELECT @@hostname)                                                                          as hostname,
+       JSON_OBJECT('core_system', 'MySQL',
+                   'table_schema', TABLE_SCHEMA,
+                   'table_name', TABLE_NAME,
+                   'engine', ENGINE,
+                   'table_rows', TABLE_ROWS,
+                   'data_length', DATA_LENGTH,
+                   'index_length', INDEX_LENGTH,
+                   'create_time', CREATE_TIME,
+                   'update_time', UPDATE_TIME,
+                   'table_comment', IF(TABLE_COMMENT = '', NULL, TABLE_COMMENT))                    as json_data,
+       JSON_OBJECT('CORE_SYSTEM', 'MySQL',
+                   'ENGINE', ENGINE,
+                   'TABLE_ROWS', TABLE_ROWS,
+                   'DATA_LENGTH', DATA_LENGTH,
+                   'INDEX_LENGTH', INDEX_LENGTH,
+                   'CREATE_TIME', CREATE_TIME,
+                   'UPDATE_TIME', UPDATE_TIME)                                                      as json_data_ui,
+       IF(TABLE_COMMENT = '', NULL, JSON_OBJECT('notifications',
+                                                JSON_ARRAY(JSON_OBJECT('title', 'Table comment',
+                                                                       'type', 'info',
+                                                                       'body',
+                                                                       TABLE_COMMENT))))            as notifications,
+       JSON_OBJECT('tables',
+                   JSON_ARRAY(JSON_OBJECT('table_name', 'Columns',
+                                          'columns', JSON_ARRAY('Ordinal position', 'Column name', 'Column type',
+                                                                'NOT NULL', 'Column default value'),
+                                          'rows', (SELECT JSON_ARRAYAGG(JSON_ARRAY(ORDINAL_POSITION,
+                                                                                   COLUMN_NAME,
+                                                                                   COLUMN_TYPE,
+                                                                                   IF(IS_NULLABLE = 'YES', FALSE, TRUE),
+                                                                                   COLUMN_DEFAULT))
+                                                   FROM information_schema.COLUMNS
+                                                   WHERE TABLE_NAME = TABLES.TABLE_NAME
+                                                     AND TABLE_SCHEMA = TABLES.TABLE_SCHEMA),
+                                          'generate_links', TRUE)))                                 as tables
+FROM information_schema.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+  AND TABLE_SCHEMA = '{{ params.schema }}';

@@ -1,0 +1,9 @@
+/venv/
+/airflow/logs/*
+/flask/app/static/flatly/
+/flask/app/static/fontawesome/
+/flask/app/static/highlightjs/
+/flask/app/static/treant/
+/.idea/
+/airflow/cert/*
+

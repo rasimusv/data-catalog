@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block header %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <a class="navbar-brand fs-4 pt-0 pb-0" href="#">
+            <img src="https://datalaboratory.one/wp-content/uploads/2022/12/Data-lab-logo-1.png" alt=""
+                 width="55"
+                 height="75"
+                 class="d-inline-block align-text-center">
+            Каталог данных</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Начальная страница</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/infocards">Инфокарты</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/lineage">Lineage</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/topology">Топология хранилищ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/docs">Документация</a>
+                </li>
+            </ul>
+            <form class="d-flex form-floating" method="post">
+                {{ form.hidden_tag() }}
+                {{ form.search(class_="form-control me-sm-2 rounded-4 shadow", placeholder_="Поиск") }}
+                {{ form.search.label}}
+                <button id="submit" class="btn btn-secondary my-2 my-sm-0 rounded-4 shadow" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col m-lg-5">
+        <a href="{{ backlink }}" class="fas fa-chevron-circle-left"> Вернуться назад</a>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div class="row justify-content-between">
+            <div class="col-4">
+                <h4>{{ data.entity_type }}</h4>
+            </div>
+            <div class="col-4">
+                <h5 class="text-info text-end">{{ data.entity_name }}</h5>
+            </div>
+        </div>
+        <h2 class="text-uppercase">{{ data.entity_name_short }}</h2>
+        <h5 class="mt-4 mb-5">{{ data.info }}</h5>
+
+        {% if data.parent_entity_name %}
+        <div class="card mb-3">
+            <h5 class="card-header">{{ data.parent_entity_type }}</h5>
+            <div class="card-body bg-light">
+                <div class="list-group rounded-4">
+                    <a href="/infocards/{{ data.parent_urn }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ data.parent_entity_name }}</h5>
+                            <small class="text-muted">{{ data.parent_core_system }}</small>
+                        </div>
+                        <p class="mb-1">{{ data.parent_info }}</p>
+                        <small>{{ data.parent_urn }}</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% for metadata_type, entities in children %}
+        <div class="card mb-3">
+            <h5 class="card-header">{{ metadata_type }}</h5>
+            <div class="card-body bg-light">
+                <div class="list-group rounded-4">
+                    {% for entity in entities %}
+                    <a href="/infocards/{{ entity.urn }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ entity.entity_name }}</h5>
+                            <small class="text-muted">{{ entity.core_system }}</small>
+                        </div>
+                        <p class="mb-1">{{ entity.info }}</p>
+                        <small class="text-muted">{{ entity.urn }}</small>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="card mb-3">
+            <h5 class="card-header">Data Lineage</h5>
+            <div class="card-body bg-light">
+                <div class="list-group rounded-4">
+                    {% for relation in relations %}
+                    <a href="/lineage/{{ relation.rid }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ relation.relation }}</h5>
+                            <small class="text-muted">{{ relation.core_system }}</small>
+                        </div>
+                        <p class="mb-1">Последнее выполнение: {{ relation.last_time }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% if ui_data %}
+        <div class="card mb-3">
+            <h5 class="card-header">Параметры сущности</h5>
+            <div class="card-body bg-light">
+                <table class="table table-striped">
+                    <tbody>
+                    {% for parameter_name, parameter in ui_data %}
+                    <tr>
+                        <td>{{ parameter_name }}</td>
+                        <td>{{ parameter }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+        {% if codes[0] %}
+        <div class="card mb-3">
+            <h5 class="card-header">Код</h5>
+            <div class="card-body bg-light">
+                <div class="list-group rounded-4">
+                    {% for code in codes %}
+                    <a class="list-group-item">
+                        <pre class="mb-2 mt-2"><code class="h5 nohighlight">{{ code.code_name }}</code></pre>
+                        <pre><code class="mb-1 {{ code.code_style }}">{{ code.code_block }}</code></pre>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% if tags %}
+        <div class="card mb-3">
+            <div class="d-flex w-100 justify-content-between card-header">
+                <h5 class="mb-0">Теги</h5>
+                <a>{{ tags }}</a>
+            </div>
+        </div>
+        {% endif %}
+        <div>
+            <!-- Здесь может находиться кастомный HTML код -->
+        </div>
+    </div>
+</div>
+{% endblock %}
